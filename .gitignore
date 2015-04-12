@@ -42,3 +42,7 @@ tramp
 
 # cask packages
 .cask/
+
+### Data ###
+in/
+out/
