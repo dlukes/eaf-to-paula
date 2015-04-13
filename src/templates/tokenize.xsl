@@ -22,7 +22,8 @@
 
   <xsl:template match="TIME_SLOT">
     <xsl:variable name="i" select="position()"/>
-    <mark id="tok_{$i}" xlink:href="#xpointer(string-range(//body,'',{$i},0))"/>
+    <xsl:variable name="id" select="@TIME_SLOT_ID"/>
+    <mark id="{$id}" xlink:href="#xpointer(string-range(//body,'',{$i},0))"/>
   </xsl:template>
 
 </xsl:stylesheet>
