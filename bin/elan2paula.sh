@@ -8,10 +8,13 @@ SCRIPTDIR=$( cd "$( dirname "$0" )" && pwd )
 BASEDIR="$SCRIPTDIR/.."
 XSLTPROC="saxonb-xslt -ext:on"
 
-for file in $1/*.eaf; do
+# can't use for loop here as I don't control the whitespace in the path to the
+# corpus
+find "$1" -iname "*.eaf" -print0 | while IFS= read -r -d '' file; do
+    # for loop acceptable -- $BASEDIR is quoted and there's no whitespace in
+    # the directories I myself control
     for template in "$BASEDIR"/src/templates/*.xsl; do
-        comm="$XSLTPROC ""$file ""$template"
-        echo "Running: $comm"
-        $comm
+        echo "Running: $XSLTPROC '$file' $template"
+        $XSLTPROC "$file" $template
     done
 done
