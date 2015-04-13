@@ -9,7 +9,7 @@ BASEDIR="$SCRIPTDIR/.."
 XSLTPROC="saxonb-xslt -ext:on"
 
 for file in $1/*.eaf; do
-    for template in "$BASEDIR/src/*.xsl"; do
+    for template in "$BASEDIR"/src/templates/*.xsl; do
         comm="$XSLTPROC ""$file ""$template"
         echo "Running: $comm"
         $comm

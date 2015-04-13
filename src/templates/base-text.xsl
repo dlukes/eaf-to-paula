@@ -3,7 +3,7 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:lib="lib:lib"
                 exclude-result-prefixes="lib">
-  <xsl:import href="lib.xsl"/>
+  <xsl:import href="../lib/lib.xsl"/>
   <xsl:output method="xml" version="1.0" standalone="no" indent="yes"
               doctype-system="paula_text.dtd" encoding="UTF-8"/>
 
