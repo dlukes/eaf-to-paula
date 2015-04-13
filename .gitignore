@@ -45,4 +45,5 @@ tramp
 
 ### Data ###
 in/
-out/
+elan-corpus/
+template/
