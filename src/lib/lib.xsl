@@ -13,17 +13,21 @@
   </xsl:function>
 
   <!-- Given a TIME_SLOT element and a TIME_VALUE, return the first TIME_SLOT
-       in the TIME_ORDER with the same TIME_VALUE. -->
+       in the TIME_ORDER with the same TIME_VALUE. The smoothing parameter sets
+       the amount of lenience with which two TIME_VALUEs can still be
+       considered the same (= maximum acceptable difference in
+       milliseconds). -->
 
   <xsl:function name="lib:first-ts-with-same-val" as="xs:string">
     <xsl:param name="current-ts"/>
-    <xsl:param name="time-val" as="xs:string"/>
+    <xsl:param name="time-val" as="xs:integer"/>
+    <xsl:param name="smoothing" as="xs:integer"/>
     <xsl:variable name="preceding-sibling"
                   select="$current-ts/preceding-sibling::TIME_SLOT[1]"/>
     <xsl:choose>
-      <xsl:when test="$preceding-sibling/@TIME_VALUE = $time-val">
+      <xsl:when test="abs($preceding-sibling/@TIME_VALUE - $time-val) &lt;= $smoothing">
         <xsl:sequence
-            select="lib:first-ts-with-same-val($preceding-sibling, $time-val)"/>
+            select="lib:first-ts-with-same-val($preceding-sibling, $time-val, $smoothing)"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:sequence select="$current-ts/@TIME_SLOT_ID"/>

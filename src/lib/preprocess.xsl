@@ -35,8 +35,9 @@
     <xsl:variable name="time-ref" select="."/>
     <xsl:variable name="initial-ts" select="//TIME_SLOT[@TIME_SLOT_ID = $time-ref]"/>
     <xsl:variable name="time-val" select="$initial-ts/@TIME_VALUE"/>
+    <xsl:variable name="smoothing" select="20"/>
     <xsl:attribute name="{name(.)}"
-                   select="lib:first-ts-with-same-val($initial-ts, $time-val)"/>
+                   select="lib:first-ts-with-same-val($initial-ts, $time-val, $smoothing)"/>
   </xsl:template>
 
 </xsl:stylesheet>
