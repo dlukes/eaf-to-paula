@@ -32,7 +32,7 @@ for f in glob.iglob(os.path.join(IN_DIR, ACCEPTED_FILE_GLOB)):
         sys.exit(1)
 
     # create output directory for current document
-    file_no_ext = os.path.splitext(basename)[0]
+    file_no_ext = "doc" + os.path.splitext(basename)[0]
     curr_doc_out_dir = os.path.join(OUT_DIR, file_no_ext)
     if not os.path.exists(curr_doc_out_dir):
         os.makedirs(curr_doc_out_dir)
