@@ -14,7 +14,7 @@
       <paula version="1.1">
         <header paula_id="elan-corpus.{$file-no-ext}.tok_audio"/>
         <featList type="audio" xml:base="elan-corpus.{$file-no-ext}.tok.xml">
-          <feat id="audio_1" xlink:href="#tok_1" value="[ExtFile]{$file-no-ext}/{$file-no-ext}.wav"/>
+          <feat id="audio_1" xlink:href="#ts1" value="[ExtFile]{$file-no-ext}/{$file-no-ext}.wav"/>
         </featList>
       </paula>
     </xsl:result-document>
