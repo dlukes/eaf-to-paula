@@ -16,12 +16,15 @@ annotation. These can be further converted to the relANNIS format used by the
   [Saxon / Saxon B](http://saxon.sourceforge.net/) is expected by the bundled
   wrapper script
   - install on Ubuntu with `apt-get install libsaxonb-java`
+- an XML validator, such as `xmllint`
+  - install on Ubuntu with `apt-get install libxml2`
 - Python 3.x if (to run the bundled wrapper script)
 
 # Usage
 
 Verify that the first string in the `XSLTPROC` list is a correct path to an
-XSLT 2.0 compliant processor on your system (or change it accordingly). Then,
+XSLT 2.0 compliant processor on your system (or change it accordingly).
+Similarly with the XML validator command stored in the `XMLLINT` list. Then,
 run:
 
 ```bash
