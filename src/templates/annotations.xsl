@@ -10,14 +10,40 @@
 
   <xsl:template match="/">
     <xsl:variable name="file-no-ext" select="lib:file-no-ext(base-uri())"/>
+
+    <!-- map participant names to shorter ASCII-only names -->
+
+    <xsl:variable name="speakers">
+      <xsl:for-each select="distinct-values(//@PARTICIPANT)">
+        <entry key="{.}" value="spk{position()}"/>
+      </xsl:for-each>
+    </xsl:variable>
+
+    <!-- map linguistic types to shorter ASCII-only names  -->
+
+    <xsl:variable name="ling-types">
+      <entry key="fonetický" value="fon"/>
+      <entry key="ortografický" value="ort"/>
+      <entry key="meta" value="meta"/>
+      <entry key="META" value="META"/>
+      <entry key="anom" value="anom"/>
+    </xsl:variable>
+
+    <!-- !!! solution for unknown tier types: only ASCII + truncate + add a
+         positional number in case homonymy arises from the previous two
+         steps -->
+
+    <!-- create markables / features for tiers -->
+
     <xsl:for-each select="/ANNOTATION_DOCUMENT/TIER">
-      <xsl:variable name="tier-type" select="@LINGUISTIC_TYPE_REF"/>
+      <xsl:variable name="full-tier-type" select="@LINGUISTIC_TYPE_REF"/>
+      <xsl:variable name="tier-type" select="$ling-types/entry[@key = $full-tier-type]/@value"/>
 
       <!-- tiers with participants should be namespaced by those participants -->
 
       <xsl:variable name="speaker-id">
         <xsl:if test="@PARTICIPANT">
-          <xsl:value-of select="concat(@PARTICIPANT, '.')"/>
+          <xsl:value-of select="concat($speakers/entry[@key = current()/@PARTICIPANT]/@value, '.')"/>
         </xsl:if>
       </xsl:variable>
 
@@ -31,18 +57,11 @@
           </xsl:when>
           <xsl:otherwise>
             <xsl:variable name="parent-ref" select="@PARENT_REF"/>
-            <xsl:value-of select="//TIER[@TIER_ID = $parent-ref]/@LINGUISTIC_TYPE_REF"/>
+            <xsl:variable name="full-parent-type" select="//TIER[@TIER_ID = $parent-ref]/@LINGUISTIC_TYPE_REF"/>
+            <xsl:value-of select="$ling-types/entry[@key = $full-parent-type]/@value"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:variable>
-
-      <!-- !!! solution for range of markables: sort the tok_time annotations and
-           make the endpoint of the range refer to the node preceding that with
-           the end-time id -->
-
-      <!-- !!! solution for unknown tier types: only ASCII + truncate + add a
-           positional number in case homonymy arises from the previous two
-           steps -->
 
       <!-- create a markable file only for alignable annotation tiers (ref
            annotation tiers will be anchored to their parent alignable
@@ -82,14 +101,14 @@
 
   <xsl:template match="ANNOTATION/ALIGNABLE_ANNOTATION" mode="markable">
     <xsl:variable name="start-tok" select="@TIME_SLOT_REF1"/>
-    <xsl:variable name="end-tok-up-to" select="@TIME_SLOT_REF2"/>
+    <xsl:variable name="end-tok" select="@TIME_SLOT_REF2"/>
+    <xsl:variable name="time-order" select="/ANNOTATION_DOCUMENT/TIME_ORDER"/>
+    <xsl:variable name="id" select="@ANNOTATION_ID"/>
     <!-- the xpointer range-to operator returns an inclusive range, but we
          actually need the markable span to stop just short of TIME_SLOT_REF2 -->
-    <xsl:variable name="end-tok-including"
-                  select="//TIME_SLOT[@TIME_SLOT_ID = $end-tok-up-to]/preceding-sibling::TIME_SLOT[1]/@TIME_SLOT_ID"/>
-    <xsl:variable name="id" select="@ANNOTATION_ID"/>
     <mark id="{$id}"
-          xlink:href="#xpointer(id('{$start-tok}')/range-to(id('{$end-tok-including}')))"/>
+          xlink:href="#xpointer(id('{$start-tok}')/range-to(id('{lib:preceding-ts($end-tok,
+                      $time-order)}')))"/>
   </xsl:template>
 
   <xsl:template match="ANNOTATION/ALIGNABLE_ANNOTATION" mode="feature">

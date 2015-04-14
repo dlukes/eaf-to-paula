@@ -31,4 +31,14 @@
     </xsl:choose>
   </xsl:function>
 
+  <!-- Given a TIME_SLOT in the (ordered) TIME_ORDER, return the preceding
+       one. -->
+
+  <xsl:function name="lib:preceding-ts">
+    <xsl:param name="ts"/>
+    <xsl:param name="time-order"/>
+    <xsl:sequence
+        select="$time-order/TIME_SLOT[@TIME_SLOT_ID = $ts]/preceding-sibling::TIME_SLOT[1]/@TIME_SLOT_ID"/>
+  </xsl:function>
+
 </xsl:stylesheet>
