@@ -4,7 +4,7 @@
                 xmlns:lib="lib:lib"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
                 exclude-result-prefixes="lib">
-  <xsl:import href="../lib/lib.xsl"/>
+  <xsl:import href="lib.xsl"/>
   <xsl:output method="xml" version="1.0" standalone="no" indent="yes"
               encoding="UTF-8"/>
 
