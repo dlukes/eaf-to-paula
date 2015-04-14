@@ -68,8 +68,8 @@
           href="elan-corpus/{$file-no-ext}/{$speaker-id}elan-corpus.{$file-no-ext}.{$base-type}_seg_{$tier-type}.xml"
           doctype-system="paula_feat.dtd">
         <paula version="1.1">
-          <header paula_id="{$speaker-id}.elan-corpus.{$file-no-ext}.{$tier-type}_seg"/>
-          <featList type="{$tier-type}" xml:base="{$speaker-id}elan-corpus.{$file-no-ext}.{$base-type}_seg_{$tier-type}.xml">
+          <header paula_id="{$speaker-id}elan-corpus.{$file-no-ext}.{$base-type}_seg_{$tier-type}"/>
+          <featList type="{$tier-type}" xml:base="{$speaker-id}elan-corpus.{$file-no-ext}.{$base-type}_seg.xml">
             <xsl:apply-templates select="ANNOTATION/*" mode="feature">
               <xsl:with-param name="tier-type" select="$tier-type"/>
             </xsl:apply-templates>
@@ -82,10 +82,14 @@
 
   <xsl:template match="ANNOTATION/ALIGNABLE_ANNOTATION" mode="markable">
     <xsl:variable name="start-tok" select="@TIME_SLOT_REF1"/>
-    <xsl:variable name="end-tok" select="@TIME_SLOT_REF2"/>
+    <xsl:variable name="end-tok-up-to" select="@TIME_SLOT_REF2"/>
+    <!-- the xpointer range-to operator returns an inclusive range, but we
+         actually need the markable span to stop just short of TIME_SLOT_REF2 -->
+    <xsl:variable name="end-tok-including"
+                  select="//TIME_SLOT[@TIME_SLOT_ID = $end-tok-up-to]/preceding-sibling::TIME_SLOT[1]/@TIME_SLOT_ID"/>
     <xsl:variable name="id" select="@ANNOTATION_ID"/>
     <mark id="{$id}"
-          xlink:href="#xpointer(id('{$start-tok}')/range-to(id('{$end-tok}')))"/>
+          xlink:href="#xpointer(id('{$start-tok}')/range-to(id('{$end-tok-including}')))"/>
   </xsl:template>
 
   <xsl:template match="ANNOTATION/ALIGNABLE_ANNOTATION" mode="feature">
