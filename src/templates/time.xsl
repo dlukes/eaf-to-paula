@@ -31,8 +31,12 @@
     <xsl:variable name="end-time"
                   select="//TIME_SLOT[@TIME_SLOT_ID = $end-tok]/@TIME_VALUE div
                           1000"/>
+    <xsl:variable name="time-order" select="/ANNOTATION_DOCUMENT/TIME_ORDER"/>
+    <!-- the xpointer range-to operator returns an inclusive range, but we
+         actually need the markable span to stop just short of TIME_SLOT_REF2 -->
     <feat id="{$id}"
-          xlink:href="#xpointer(id('{$start-tok}')/range-to(id('{$end-tok}')))"
+          xlink:href="#xpointer(id('{$start-tok}')/range-to(id('{lib:preceding-ts($end-tok,
+                      $time-order)}')))"
           value="{$start-time}-{$end-time}"/>
   </xsl:template>
 
