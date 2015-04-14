@@ -45,4 +45,12 @@
         select="$time-order/TIME_SLOT[@TIME_SLOT_ID = $ts]/preceding-sibling::TIME_SLOT[1]/@TIME_SLOT_ID"/>
   </xsl:function>
 
+  <!-- Map linguistic types to three-character ASCII-only names without spaces. -->
+  <xsl:function name="lib:normalize-ling-type" as="xs:string">
+    <xsl:param name="ling-type" as="xs:string"/>
+    <xsl:variable name="only-ascii-letters"
+                  select="replace(normalize-unicode($ling-type,'NFKD'),'[^a-zA-Z]','')"/>
+    <xsl:sequence select="substring($only-ascii-letters, 1, 3)"/>
+  </xsl:function>
+
 </xsl:stylesheet>

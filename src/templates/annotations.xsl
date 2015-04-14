@@ -19,25 +19,11 @@
       </xsl:for-each>
     </xsl:variable>
 
-    <!-- map linguistic types to shorter ASCII-only names  -->
-
-    <xsl:variable name="ling-types">
-      <entry key="fonetický" value="fon"/>
-      <entry key="ortografický" value="ort"/>
-      <entry key="meta" value="meta"/>
-      <entry key="META" value="META"/>
-      <entry key="anom" value="anom"/>
-    </xsl:variable>
-
-    <!-- !!! solution for unknown tier types: only ASCII + truncate + add a
-         positional number in case homonymy arises from the previous two
-         steps -->
-
     <!-- create markables / features for tiers -->
 
     <xsl:for-each select="/ANNOTATION_DOCUMENT/TIER">
       <xsl:variable name="full-tier-type" select="@LINGUISTIC_TYPE_REF"/>
-      <xsl:variable name="tier-type" select="$ling-types/entry[@key = $full-tier-type]/@value"/>
+      <xsl:variable name="tier-type" select="lib:normalize-ling-type($full-tier-type)"/>
 
       <!-- tiers with participants should be namespaced by those participants -->
 
@@ -58,7 +44,7 @@
           <xsl:otherwise>
             <xsl:variable name="parent-ref" select="@PARENT_REF"/>
             <xsl:variable name="full-parent-type" select="//TIER[@TIER_ID = $parent-ref]/@LINGUISTIC_TYPE_REF"/>
-            <xsl:value-of select="$ling-types/entry[@key = $full-parent-type]/@value"/>
+            <xsl:value-of select="lib:normalize-ling-type($full-parent-type)"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:variable>
