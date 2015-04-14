@@ -7,6 +7,7 @@
 import os
 import sys
 import glob
+import shutil
 import subprocess
 
 import re
@@ -15,6 +16,7 @@ SCRIPTDIR = os.path.dirname(os.path.realpath(__file__))
 BASEDIR = os.path.normpath(os.path.join(SCRIPTDIR, ".."))
 TEMPLDIR = os.path.join(BASEDIR, "src", "templates")
 LIBDIR = os.path.join(BASEDIR, "src", "lib")
+DTDDIR = os.path.join(BASEDIR, "src", "dtds")
 PREPROC = os.path.join(LIBDIR, "preprocess.xsl")
 IN_DIR = sys.argv[1]
 OUT_DIR = "elan-corpus"
@@ -50,6 +52,11 @@ for f in glob.iglob(os.path.join(IN_DIR, ACCEPTED_FILE_GLOB)):
         command = XSLTPROC + [tempfile, template]
         sys.stderr.write("Running: {}\n".format(" ".join(command)))
         subprocess.call(command)
+
+    sys.stderr.write("Copying DTD files for {}.\n".format(basename))
+    for dtd in glob.iglob(os.path.join(DTDDIR, "*.dtd")):
+        dtd_basename = os.path.basename(dtd)
+        shutil.copyfile(dtd, os.path.join(curr_doc_out_dir, dtd_basename))
 
     sys.stderr.write("Removing temporary files for {}.\n".format(basename))
     os.remove(tempfile)
