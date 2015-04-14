@@ -69,6 +69,7 @@ priority.
 
 # License
 
-Copyright © 2015 David Lukeš
+Copyright © 2015 David Lukeš, except for files located in `src/dtds`, which are
+part of the PAULA specification.
 
 Distributed under the GNU General Public License v3.
