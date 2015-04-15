@@ -9,12 +9,18 @@
               doctype-system="paula_feat.dtd" encoding="UTF-8"/>
 
   <xsl:param name="corpus-name" select="'elan-corpus'"/>
+  <xsl:param name="out-dir" select="'./'"/>
 
   <xsl:template match="/">
     <xsl:variable name="file-no-ext" select="lib:file-no-ext(base-uri())"/>
-    <xsl:result-document href="{$corpus-name}/{$file-no-ext}/annis.{$corpus-name}.{$file-no-ext}.tok_time.xml">
+    <xsl:variable name="doc-dir"
+                  select="concat($out-dir, '/', $corpus-name, '/', $file-no-ext)"/>
+    <xsl:variable name="paula-id"
+                  select="concat('annis.', $corpus-name, '.', $file-no-ext, '.tok_time')"/>
+
+    <xsl:result-document href="{$doc-dir}/{$paula-id}.xml">
       <paula version="1.1">
-        <header paula_id="annis.{$corpus-name}.{$file-no-ext}.tok_time"/>
+        <header paula_id="{$paula-id}"/>
         <featList type="time" xml:base="{$corpus-name}.{$file-no-ext}.tok.xml">
 
           <!-- for each TIME_SLOT, create a time annotation starting at its
@@ -25,6 +31,7 @@
         </featList>
       </paula>
     </xsl:result-document>
+
   </xsl:template>
 
   <xsl:template match="TIME_SLOT">

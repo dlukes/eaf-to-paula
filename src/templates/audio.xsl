@@ -9,12 +9,18 @@
               doctype-system="paula_feat.dtd" encoding="UTF-8"/>
 
   <xsl:param name="corpus-name" select="'elan-corpus'"/>
+  <xsl:param name="out-dir" select="'./'"/>
 
   <xsl:template match="/">
     <xsl:variable name="file-no-ext" select="lib:file-no-ext(base-uri())"/>
-    <xsl:result-document href="{$corpus-name}/{$file-no-ext}/{$corpus-name}.{$file-no-ext}.tok_audio.xml">
+    <xsl:variable name="doc-dir"
+                  select="concat($out-dir, '/', $corpus-name, '/',
+                          $file-no-ext)"/>
+    <xsl:variable name="paula-id"
+                  select="concat($corpus-name, '.', $file-no-ext, '.tok_audio')"/>
+    <xsl:result-document href="{$doc-dir}/{$paula-id}.xml">
       <paula version="1.1">
-        <header paula_id="{$corpus-name}.{$file-no-ext}.tok_audio"/>
+        <header paula_id="{$paula-id}"/>
         <featList type="audio" xml:base="{$corpus-name}.{$file-no-ext}.tok.xml">
           <feat id="audio_1" xlink:href="#ts1" value="[ExtFile]{$file-no-ext}/{$file-no-ext}.wav"/>
         </featList>

@@ -11,6 +11,7 @@
   <xsl:param name="corpus-name" select="'elan-corpus'"/>
   <xsl:param name="prepend" select="'doc'"/>
   <xsl:param name="smoothing" select="20"/>
+  <xsl:param name="out-dir" select="'./'"/>
 
   <xsl:template match="@*|node()">
     <xsl:copy>
@@ -21,7 +22,9 @@
   <xsl:template match="/">
     <xsl:variable name="file-no-ext" select="lib:file-no-ext(base-uri())"/>
     <xsl:variable name="doc-name" select="concat($prepend, $file-no-ext)"/>
-    <xsl:result-document href="{$corpus-name}/{$doc-name}/{$doc-name}.temp">
+    <xsl:variable name="doc-dir"
+                  select="concat($out-dir, '/', $corpus-name, '/', $doc-name)"/>
+    <xsl:result-document href="{$doc-dir}/{$doc-name}.temp">
       <xsl:copy>
         <xsl:apply-templates select="node()"/>
       </xsl:copy>

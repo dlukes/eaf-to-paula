@@ -9,9 +9,12 @@
               encoding="UTF-8"/>
 
   <xsl:param name="corpus-name" select="'elan-corpus'"/>
+  <xsl:param name="out-dir" select="'./'"/>
 
   <xsl:template match="/">
     <xsl:variable name="file-no-ext" select="lib:file-no-ext(base-uri())"/>
+    <xsl:variable name="doc-dir"
+                  select="concat($out-dir, '/', $corpus-name, '/', $file-no-ext)"/>
 
     <!-- map participant names to shorter ASCII-only names -->
 
@@ -51,16 +54,20 @@
         </xsl:choose>
       </xsl:variable>
 
+      <xsl:variable name="paula-markable-id"
+                    select="concat($speaker-id, $corpus-name, '.',
+                            $file-no-ext, '.', $base-type, '_seg')"/>
       <!-- create a markable file only for alignable annotation tiers (ref
            annotation tiers will be anchored to their parent alignable
            annotation tiers) -->
 
       <xsl:if test="not(@PARENT_REF)">
+
         <xsl:result-document
-            href="{$corpus-name}/{$file-no-ext}/{$speaker-id}{$corpus-name}.{$file-no-ext}.{$tier-type}_seg.xml"
+            href="{$doc-dir}/{$paula-markable-id}.xml"
             doctype-system="paula_mark.dtd">
           <paula version="1.1">
-            <header paula_id="{$speaker-id}{$corpus-name}.{$file-no-ext}.{$tier-type}_seg"/>
+            <header paula_id="{$paula-markable-id}"/>
             <markList type="{$tier-type}" xml:base="{$corpus-name}.{$file-no-ext}.tok.xml">
               <xsl:apply-templates select="ANNOTATION/*" mode="markable"/>
             </markList>
@@ -72,11 +79,11 @@
       -->
 
       <xsl:result-document
-          href="{$corpus-name}/{$file-no-ext}/{$speaker-id}{$corpus-name}.{$file-no-ext}.{$base-type}_seg_{$tier-type}.xml"
+          href="{$doc-dir}/{$paula-markable-id}_{$tier-type}.xml"
           doctype-system="paula_feat.dtd">
         <paula version="1.1">
-          <header paula_id="{$speaker-id}{$corpus-name}.{$file-no-ext}.{$base-type}_seg_{$tier-type}"/>
-          <featList type="{$tier-type}" xml:base="{$speaker-id}{$corpus-name}.{$file-no-ext}.{$base-type}_seg.xml">
+          <header paula_id="{$paula-markable-id}_{$tier-type}"/>
+          <featList type="{$tier-type}" xml:base="{$paula-markable-id}.xml">
             <xsl:apply-templates select="ANNOTATION/*" mode="feature">
               <xsl:with-param name="tier-type" select="$tier-type"/>
             </xsl:apply-templates>
