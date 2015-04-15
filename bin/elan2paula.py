@@ -20,10 +20,50 @@ import re
 
 ### INVOCATION OF EXTERNAL PROGRAMS ###
 
-XSLTPROC = "saxonb-xslt"
+XSLTPROC = "saxonb-xslt" # "saxon"
 XMLLINT = "xmllint"
 
 #######################################
+
+def xsltproc(input_file, xsl=None, args=None, message="Running: {}.\n"):
+    """Run XSLTPROC on input_file with stylesheet xsl and args, outputting
+    message to STDERR.
+
+    """
+    global XSLTPROC
+
+    command = [XSLTPROC, "-ext:on"]
+    if xsl:
+        command.append("-xsl:{}".format(xsl))
+
+    # the user supplied output directory is split into two parameters for the
+    # XSLT stylesheets: out-dir (the path up to the last directory) and
+    # corpus-name (the last directory)
+    outdir, cname = os.path.split(args.output_dir)
+    outdir = os.path.curdir if not outdir else outdir
+    xsltparams = ["corpus-name={}".format(cname),
+                  "out-dir={}".format(outdir),
+                  "smoothing={}".format(args.smoothing),
+                  "prepend={}".format(args.prepend)]
+
+    command = command + [input_file] + xsltparams
+    sys.stderr.write(message.format(" ".join(command)))
+    subprocess.call(command)
+
+def xmllint(input_file):
+    """Run XMLLINT on input_file.
+
+    """
+    global XMLLINT
+
+    command = [XMLLINT, "--valid", "--noout"]
+
+    sys.stderr.write("  {}... ".format(input_file))
+    if subprocess.call(command + [input_file]) == 0:
+        sys.stderr.write(" OK\n")
+    else:
+        sys.stderr.write(" ERROR\n")
+        sys.exit(1)
 
 def process_command_line(argv):
     """Return args list.  `argv` is a list of arguments, or `None` for
@@ -56,8 +96,6 @@ def process_command_line(argv):
 def main(argv=None):
     args = process_command_line(argv)
 
-    global XSLTPROC, XMLLINT
-
     SCRIPTDIR = os.path.dirname(os.path.realpath(__file__))
     BASEDIR = os.path.normpath(os.path.join(SCRIPTDIR, ".."))
     TEMPLDIR = os.path.join(BASEDIR, "src", "templates")
@@ -67,10 +105,7 @@ def main(argv=None):
     IN_DIR = args.input_dir[0]
     OUT_DIR = args.output_dir
     ACCEPTED_FILE_GLOB = "*.eaf"
-    XSLTPROC = [XSLTPROC, "-ext:on"]
-    XSLTPARAMS = ["corpus-name=elan-corpus"]
-    # XSLTPROC = ["saxon", "-ext:on"]
-    XMLLINT = [XMLLINT, "--valid", "--noout"]
+    PREPEND = args.prepend
 
     for f in glob.iglob(os.path.join(IN_DIR, ACCEPTED_FILE_GLOB)):
         # abort if an input file contains whitespace in basename
@@ -80,23 +115,21 @@ def main(argv=None):
                              "before proceeding.\n".format(basename))
             sys.exit(1)
 
+        sys.stderr.write("### Processing file {}. ###\n".format(f))
+
         # create output directory for current document
-        file_no_ext = "doc" + os.path.splitext(basename)[0]
+        file_no_ext = PREPEND + os.path.splitext(basename)[0]
         curr_doc_out_dir = os.path.join(OUT_DIR, file_no_ext)
         if not os.path.exists(curr_doc_out_dir):
             os.makedirs(curr_doc_out_dir)
 
-        # preprocess ELAN file (= deduplicate TIME_ORDER and rewire TIME_SLOT_REFs)
+        # preprocess ELAN file (= deduplicate TIME_ORDER and rewire
+        # TIME_SLOT_REFs); the result is stored in tempfile
+        xsltproc(f, PREPROC, args, "Preprocessing file with: {}\n")
         tempfile = os.path.join(OUT_DIR, file_no_ext, file_no_ext + ".temp")
-        command = XSLTPROC + ["-xsl:{}".format(PREPROC), f]
-        sys.stderr.write("Preprocessing file {} with: {}\n".
-                         format(basename, " ".join(command)))
-        subprocess.call(command)
 
         for template in glob.iglob(os.path.join(TEMPLDIR, "*.xsl")):
-            command = XSLTPROC + [tempfile, template] + XSLTPARAMS
-            sys.stderr.write("Running: {}\n".format(" ".join(command)))
-            subprocess.call(command)
+            xsltproc(tempfile, template, args)
 
         sys.stderr.write("Copying DTD files for {}.\n".format(basename))
         for dtd in glob.iglob(os.path.join(DTDDIR, "*.dtd")):
@@ -106,17 +139,13 @@ def main(argv=None):
         sys.stderr.write("Removing temporary files for {}.\n".format(basename))
         os.remove(tempfile)
 
+        sys.stderr.write("### Finished processing file {}. ###\n".format(f))
+
     sys.stderr.write("Verifying generated files according to DTDs:\n")
     for root, dirs, files in os.walk(OUT_DIR):
         for f in files:
             if f.endswith(".xml"):
-                sys.stderr.write("  {}... ".format(f))
-                fpath = os.path.join(root, f)
-                if subprocess.call(XMLLINT + [fpath]) == 0:
-                    sys.stderr.write(" OK\n")
-                else:
-                    sys.stderr.write(" ERROR\n")
-                    sys.exit(1)
+                xmllint(os.path.join(root, f))
 
     return 0        # success
 
