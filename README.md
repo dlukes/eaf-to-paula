@@ -22,9 +22,9 @@ annotation. These can be further converted to the relANNIS format used by the
 
 # Usage
 
-Verify that the string `XSLTPROC` is a correct path to Saxon / Saxon B
-(XSLT 2.0 compliant) on your system (or change it accordingly).  Similarly with
-the XML validator command stored in `XMLLINT`. Then, run:
+Verify that the string `XSLTPROC` in `bin/elan2paula.py` is a correct path to
+Saxon / Saxon B (XSLT 2.0 compliant) on your system (or change it accordingly).
+Similarly with the XML validator command stored in `XMLLINT`. Then, run:
 
 ```sh
 $ bin/elan2paula.py path/to/input/eaf/files/
