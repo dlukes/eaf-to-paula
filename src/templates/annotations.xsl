@@ -8,7 +8,7 @@
   <xsl:output method="xml" version="1.0" standalone="no" indent="yes"
               encoding="UTF-8"/>
 
-  <xsl:param name="corpus-name"/>
+  <xsl:param name="corpus-name" select="'elan-corpus'"/>
 
   <xsl:template match="/">
     <xsl:variable name="file-no-ext" select="lib:file-no-ext(base-uri())"/>

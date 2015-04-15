@@ -18,6 +18,13 @@ import subprocess
 
 import re
 
+### INVOCATION OF EXTERNAL PROGRAMS ###
+
+XSLTPROC = "saxonb-xslt"
+XMLLINT = "xmllint"
+
+#######################################
+
 def process_command_line(argv):
     """Return args list.  `argv` is a list of arguments, or `None` for
     ``sys.argv[1:]``.
@@ -39,6 +46,8 @@ def process_command_line(argv):
                         name of the corpus""", default="elan-corpus")
     parser.add_argument("-s", "--smoothing", type=int, default=20,
                         help="""smoothing of timeline in ms (see README)""")
+    parser.add_argument("-p", "--prepend", default="doc", help="""string to
+                        prepend to each document name""")
 
     args = parser.parse_args(argv)
 
@@ -46,6 +55,8 @@ def process_command_line(argv):
 
 def main(argv=None):
     args = process_command_line(argv)
+
+    global XSLTPROC, XMLLINT
 
     SCRIPTDIR = os.path.dirname(os.path.realpath(__file__))
     BASEDIR = os.path.normpath(os.path.join(SCRIPTDIR, ".."))
@@ -56,10 +67,10 @@ def main(argv=None):
     IN_DIR = args.input_dir[0]
     OUT_DIR = args.output_dir
     ACCEPTED_FILE_GLOB = "*.eaf"
-    XSLTPROC = ["saxonb-xslt", "-ext:on"]
+    XSLTPROC = [XSLTPROC, "-ext:on"]
     XSLTPARAMS = ["corpus-name=elan-corpus"]
     # XSLTPROC = ["saxon", "-ext:on"]
-    XMLLINT = ["xmllint", "--valid", "--noout"]
+    XMLLINT = [XMLLINT, "--valid", "--noout"]
 
     for f in glob.iglob(os.path.join(IN_DIR, ACCEPTED_FILE_GLOB)):
         # abort if an input file contains whitespace in basename
@@ -77,9 +88,7 @@ def main(argv=None):
 
         # preprocess ELAN file (= deduplicate TIME_ORDER and rewire TIME_SLOT_REFs)
         tempfile = os.path.join(OUT_DIR, file_no_ext, file_no_ext + ".temp")
-        command = XSLTPROC + ["-xsl:{}".format(PREPROC),
-                              "-o:{}".format(tempfile),
-                              f]
+        command = XSLTPROC + ["-xsl:{}".format(PREPROC), f]
         sys.stderr.write("Preprocessing file {} with: {}\n".
                          format(basename, " ".join(command)))
         subprocess.call(command)

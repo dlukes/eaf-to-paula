@@ -8,10 +8,24 @@
   <xsl:output method="xml" version="1.0" standalone="no" indent="yes"
               encoding="UTF-8"/>
 
+  <xsl:param name="corpus-name" select="'elan-corpus'"/>
+  <xsl:param name="prepend" select="'doc'"/>
+  <xsl:param name="smoothing" select="20"/>
+
   <xsl:template match="@*|node()">
     <xsl:copy>
       <xsl:apply-templates select="@*|node()"/>
     </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="/">
+    <xsl:variable name="file-no-ext" select="lib:file-no-ext(base-uri())"/>
+    <xsl:variable name="doc-name" select="concat($prepend, $file-no-ext)"/>
+    <xsl:result-document href="{$corpus-name}/{$doc-name}/{$doc-name}.temp">
+      <xsl:copy>
+        <xsl:apply-templates select="node()"/>
+      </xsl:copy>
+    </xsl:result-document>
   </xsl:template>
 
   <!-- collapse adjacent TIME_SLOTs with the same TIME_VALUE -->
@@ -35,7 +49,6 @@
     <xsl:variable name="time-ref" select="."/>
     <xsl:variable name="initial-ts" select="//TIME_SLOT[@TIME_SLOT_ID = $time-ref]"/>
     <xsl:variable name="time-val" select="$initial-ts/@TIME_VALUE"/>
-    <xsl:variable name="smoothing" select="20"/>
     <xsl:attribute name="{name(.)}"
                    select="lib:first-ts-with-same-val($initial-ts, $time-val, $smoothing)"/>
   </xsl:template>
