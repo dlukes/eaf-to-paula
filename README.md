@@ -22,12 +22,11 @@ annotation. These can be further converted to the relANNIS format used by the
 
 # Usage
 
-Verify that the first string in the `XSLTPROC` list is a correct path to an
-XSLT 2.0 compliant processor on your system (or change it accordingly).
-Similarly with the XML validator command stored in the `XMLLINT` list. Then,
-run:
+Verify that the string `XSLTPROC` is a correct path to Saxon / Saxon B
+(XSLT 2.0 compliant) on your system (or change it accordingly).  Similarly with
+the XML validator command stored in `XMLLINT`. Then, run:
 
-```bash
+```sh
 $ bin/elan2paula.py path/to/input/eaf/files/
 ```
 
@@ -36,7 +35,12 @@ called `elan-corpus`.
 
 A default smoothing of 20ms is applied to the `TIME_VALUE`s in the `TIME_ORDER`,
 i.e. events on the timeline which are less than 20ms apart are considered to
-occur at the same time.
+occur at the same time. This can be changed by setting the `-s` option on the
+command line. List all available options by running:
+
+```sh
+$ bin/elan2paula.py -h
+```
 
 # Assumptions
 
