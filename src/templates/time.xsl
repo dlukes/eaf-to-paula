@@ -15,42 +15,33 @@
         <header paula_id="annis.elan-corpus.{$file-no-ext}.tok_time"/>
         <featList type="time" xml:base="elan-corpus.{$file-no-ext}.tok.xml">
 
-          <!-- put ALIGNABLE_ANNOTATIONs into groups where both TIME_SLOT_REFs
-               are the same -->
+          <!-- for each TIME_SLOT, create a time annotation starting at its
+               TIME_VALUE and ending at its following sibling's TIME_VALUE -->
 
-          <xsl:for-each-group
-              select="ANNOTATION_DOCUMENT/TIER/ANNOTATION/ALIGNABLE_ANNOTATION"
-              group-by="concat(@TIME_SLOT_REF1, '+', @TIME_SLOT_REF2)">
-
-            <!-- output a time annotation only for the first match in each such
-                 group, otherwise SaltNPepper complains that annotations with
-                 the same QName are being repeatedly added to the same span -->
-
-            <xsl:variable name="first-match" select="current-group()[1]"/>
-            <xsl:variable name="start-tok" select="$first-match/@TIME_SLOT_REF1"/>
-            <xsl:variable name="end-tok" select="$first-match/@TIME_SLOT_REF2"/>
-            <xsl:variable name="id" select="$first-match/@ANNOTATION_ID"/>
-            <xsl:variable name="start-time"
-                          select="//TIME_SLOT[@TIME_SLOT_ID = $start-tok]/@TIME_VALUE
-                                  div 1000"/>
-            <xsl:variable name="end-time"
-                          select="//TIME_SLOT[@TIME_SLOT_ID = $end-tok]/@TIME_VALUE div
-                                  1000"/>
-            <xsl:variable name="time-order" select="/ANNOTATION_DOCUMENT/TIME_ORDER"/>
-
-            <!-- the xpointer range-to operator returns an inclusive range, but we
-                 actually need the markable span to stop just short of TIME_SLOT_REF2 -->
-
-            <feat id="{$id}"
-                  xlink:href="#xpointer(id('{$start-tok}')/range-to(id('{lib:preceding-ts($end-tok,
-                              $time-order)}')))"
-                  value="{$start-time}-{$end-time}"/>
-
-          </xsl:for-each-group>
+          <xsl:apply-templates select="ANNOTATION_DOCUMENT/TIME_ORDER/TIME_SLOT"/>
 
         </featList>
       </paula>
     </xsl:result-document>
+  </xsl:template>
+
+  <xsl:template match="TIME_SLOT">
+    <xsl:variable name="following-sibling"
+                  select="following-sibling::TIME_SLOT[1]"/>
+
+    <!-- ignore the last TIME_SLOT (it has no following sibling) -->
+
+    <xsl:if test="$following-sibling">
+      <xsl:variable name="id" select="@TIME_SLOT_ID"/>
+      <xsl:variable name="start-time"
+                    select="@TIME_VALUE div 1000"/>
+      <xsl:variable name="end-time"
+                    select="$following-sibling/@TIME_VALUE div 1000"/>
+      <feat id="{$id}"
+            xlink:href="#{$id}"
+            value="{$start-time}-{$end-time}"/>
+    </xsl:if>
+
   </xsl:template>
 
 </xsl:stylesheet>
