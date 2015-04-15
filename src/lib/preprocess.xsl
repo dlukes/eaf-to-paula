@@ -146,4 +146,22 @@
 
   </xsl:template>
 
+  <!-- ORTOFON specific: our transcripts don't always have the @PARTICIPANT
+       TIER attributes filled out, it is best inferred from the TIER_IDs -->
+
+  <xsl:template match="TIER">
+    <xsl:copy>
+      <xsl:variable name="participant"
+                    select="substring-before(@TIER_ID, ' ')"/>
+      <xsl:if test="$participant != ''">
+        <xsl:attribute name="PARTICIPANT" select="$participant"/>
+      </xsl:if>
+      <xsl:apply-templates select="@*|node()"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="@PARTICIPANT">
+    <!-- empty because overridden by the template above -->
+  </xsl:template>
+
 </xsl:stylesheet>
