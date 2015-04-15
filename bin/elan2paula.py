@@ -25,6 +25,23 @@ XMLLINT = "xmllint"
 
 #######################################
 
+### STREAM SETUP ###
+
+class Unbuffered(object):
+   def __init__(self, stream):
+       self.stream = stream
+   def write(self, data):
+       self.stream.write(data)
+       self.stream.flush()
+   def __getattr__(self, attr):
+       return getattr(self.stream, attr)
+
+# no output buffering
+sys.stderr = Unbuffered(sys.stderr)
+sys.stdout = Unbuffered(sys.stdout)
+
+####################
+
 def xsltproc(input_file, xsl=None, args=None, message="Running: {}.\n"):
     """Run XSLTPROC on input_file with stylesheet xsl and args, outputting
     message to STDERR.
