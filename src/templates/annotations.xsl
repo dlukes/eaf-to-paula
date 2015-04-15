@@ -8,6 +8,8 @@
   <xsl:output method="xml" version="1.0" standalone="no" indent="yes"
               encoding="UTF-8"/>
 
+  <xsl:param name="corpus-name"/>
+
   <xsl:template match="/">
     <xsl:variable name="file-no-ext" select="lib:file-no-ext(base-uri())"/>
 
@@ -55,11 +57,11 @@
 
       <xsl:if test="not(@PARENT_REF)">
         <xsl:result-document
-            href="elan-corpus/{$file-no-ext}/{$speaker-id}elan-corpus.{$file-no-ext}.{$tier-type}_seg.xml"
+            href="{$corpus-name}/{$file-no-ext}/{$speaker-id}{$corpus-name}.{$file-no-ext}.{$tier-type}_seg.xml"
             doctype-system="paula_mark.dtd">
           <paula version="1.1">
-            <header paula_id="{$speaker-id}elan-corpus.{$file-no-ext}.{$tier-type}_seg"/>
-            <markList type="{$tier-type}" xml:base="elan-corpus.{$file-no-ext}.tok.xml">
+            <header paula_id="{$speaker-id}{$corpus-name}.{$file-no-ext}.{$tier-type}_seg"/>
+            <markList type="{$tier-type}" xml:base="{$corpus-name}.{$file-no-ext}.tok.xml">
               <xsl:apply-templates select="ANNOTATION/*" mode="markable"/>
             </markList>
           </paula>
@@ -70,11 +72,11 @@
       -->
 
       <xsl:result-document
-          href="elan-corpus/{$file-no-ext}/{$speaker-id}elan-corpus.{$file-no-ext}.{$base-type}_seg_{$tier-type}.xml"
+          href="{$corpus-name}/{$file-no-ext}/{$speaker-id}{$corpus-name}.{$file-no-ext}.{$base-type}_seg_{$tier-type}.xml"
           doctype-system="paula_feat.dtd">
         <paula version="1.1">
-          <header paula_id="{$speaker-id}elan-corpus.{$file-no-ext}.{$base-type}_seg_{$tier-type}"/>
-          <featList type="{$tier-type}" xml:base="{$speaker-id}elan-corpus.{$file-no-ext}.{$base-type}_seg.xml">
+          <header paula_id="{$speaker-id}{$corpus-name}.{$file-no-ext}.{$base-type}_seg_{$tier-type}"/>
+          <featList type="{$tier-type}" xml:base="{$speaker-id}{$corpus-name}.{$file-no-ext}.{$base-type}_seg.xml">
             <xsl:apply-templates select="ANNOTATION/*" mode="feature">
               <xsl:with-param name="tier-type" select="$tier-type"/>
             </xsl:apply-templates>

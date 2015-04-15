@@ -8,12 +8,14 @@
   <xsl:output method="xml" version="1.0" standalone="no" indent="yes"
               doctype-system="paula_mark.dtd" encoding="UTF-8"/>
 
+  <xsl:param name="corpus-name"/>
+
   <xsl:template match="/">
     <xsl:variable name="file-no-ext" select="lib:file-no-ext(base-uri())"/>
-    <xsl:result-document href="elan-corpus/{$file-no-ext}/elan-corpus.{$file-no-ext}.tok.xml">
+    <xsl:result-document href="{$corpus-name}/{$file-no-ext}/{$corpus-name}.{$file-no-ext}.tok.xml">
       <paula version="1.1">
-        <header paula_id="elan-corpus.{$file-no-ext}.tok"/>
-        <markList type="tok" xml:base="elan-corpus.{$file-no-ext}.text.xml">
+        <header paula_id="{$corpus-name}.{$file-no-ext}.tok"/>
+        <markList type="tok" xml:base="{$corpus-name}.{$file-no-ext}.text.xml">
           <xsl:apply-templates select="ANNOTATION_DOCUMENT/TIME_ORDER/TIME_SLOT"/>
         </markList>
       </paula>

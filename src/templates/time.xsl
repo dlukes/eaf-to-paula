@@ -8,12 +8,14 @@
   <xsl:output method="xml" version="1.0" standalone="no" indent="yes"
               doctype-system="paula_feat.dtd" encoding="UTF-8"/>
 
+  <xsl:param name="corpus-name"/>
+
   <xsl:template match="/">
     <xsl:variable name="file-no-ext" select="lib:file-no-ext(base-uri())"/>
-    <xsl:result-document href="elan-corpus/{$file-no-ext}/annis.elan-corpus.{$file-no-ext}.tok_time.xml">
+    <xsl:result-document href="{$corpus-name}/{$file-no-ext}/annis.{$corpus-name}.{$file-no-ext}.tok_time.xml">
       <paula version="1.1">
-        <header paula_id="annis.elan-corpus.{$file-no-ext}.tok_time"/>
-        <featList type="time" xml:base="elan-corpus.{$file-no-ext}.tok.xml">
+        <header paula_id="annis.{$corpus-name}.{$file-no-ext}.tok_time"/>
+        <featList type="time" xml:base="{$corpus-name}.{$file-no-ext}.tok.xml">
 
           <!-- for each TIME_SLOT, create a time annotation starting at its
                TIME_VALUE and ending at its following sibling's TIME_VALUE -->

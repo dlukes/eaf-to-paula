@@ -22,6 +22,7 @@ IN_DIR = sys.argv[1]
 OUT_DIR = "elan-corpus"
 ACCEPTED_FILE_GLOB = "*.eaf"
 XSLTPROC = ["saxonb-xslt", "-ext:on"]
+XSLTPARAMS = ["corpus-name=elan-corpus"]
 # XSLTPROC = ["saxon", "-ext:on"]
 XMLLINT = ["xmllint", "--valid", "--noout"]
 
@@ -49,7 +50,7 @@ for f in glob.iglob(os.path.join(IN_DIR, ACCEPTED_FILE_GLOB)):
     subprocess.call(command)
 
     for template in glob.iglob(os.path.join(TEMPLDIR, "*.xsl")):
-        command = XSLTPROC + [tempfile, template]
+        command = XSLTPROC + [tempfile, template] + XSLTPARAMS
         sys.stderr.write("Running: {}\n".format(" ".join(command)))
         subprocess.call(command)
 
