@@ -75,6 +75,7 @@
     <xsl:attribute name="{name(.)}"
                    select="lib:first-ts-with-same-val($initial-ts, $time-val,
                            $min-time-val, $smoothing)/@TIME_SLOT_ID"/>
+
   </xsl:template>
 
   <!-- only output ALIGNABLE_ANNOTATIONs where the @TIME_VALUE of
@@ -150,14 +151,16 @@
        TIER attributes filled out, it is best inferred from the TIER_IDs -->
 
   <xsl:template match="TIER">
-    <xsl:copy>
-      <xsl:variable name="participant"
-                    select="substring-before(@TIER_ID, ' ')"/>
-      <xsl:if test="$participant != ''">
-        <xsl:attribute name="PARTICIPANT" select="$participant"/>
-      </xsl:if>
-      <xsl:apply-templates select="@*|node()"/>
-    </xsl:copy>
+    <xsl:if test="not(matches(@TIER_ID, 'KONTROLA'))">
+      <xsl:copy>
+        <xsl:variable name="participant"
+                      select="substring-before(@TIER_ID, ' ')"/>
+        <xsl:if test="$participant != ''">
+          <xsl:attribute name="PARTICIPANT" select="$participant"/>
+        </xsl:if>
+        <xsl:apply-templates select="@*|node()"/>
+      </xsl:copy>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="@PARTICIPANT">
