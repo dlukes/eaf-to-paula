@@ -52,8 +52,26 @@
     <xsl:variable name="time-ref" select="."/>
     <xsl:variable name="initial-ts" select="//TIME_SLOT[@TIME_SLOT_ID = $time-ref]"/>
     <xsl:variable name="time-val" select="$initial-ts/@TIME_VALUE"/>
+
+    <!-- if this is a @TIME_SLOT_REF2, then we shouldn't go further than the
+         @TIME_VALUE corresponding to @TIME_SLOT_REF1 when searching for the
+         first-ts-with-same-val(). -->
+
+    <xsl:variable name="min-time-val">
+      <xsl:choose>
+        <xsl:when  test="name(.) = 'TIME_SLOT_REF2'">
+          <xsl:variable name="time-ref1" select="../@TIME_SLOT_REF1"/>
+          <xsl:value-of select="//TIME_SLOT[@TIME_SLOT_ID = $time-ref1]/@TIME_VALUE"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="0"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
     <xsl:attribute name="{name(.)}"
-                   select="lib:first-ts-with-same-val($initial-ts, $time-val, $smoothing)"/>
+                   select="lib:first-ts-with-same-val($initial-ts, $time-val,
+                           $min-time-val, $smoothing)/@TIME_SLOT_ID"/>
   </xsl:template>
 
 </xsl:stylesheet>
