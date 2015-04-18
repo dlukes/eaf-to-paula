@@ -20,7 +20,7 @@ import re
 
 ### INVOCATION OF EXTERNAL PROGRAMS ###
 
-XSLTPROC = "saxonb-xslt" # "saxon"
+XSLTPROC = "saxon" # "saxonb-xslt"
 XMLLINT = "xmllint"
 
 #######################################

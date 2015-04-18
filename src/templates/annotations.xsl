@@ -110,14 +110,26 @@
     <xsl:param name="tier-type"/>
     <xsl:variable name="id" select="concat($tier-type, '_', position())"/>
     <xsl:variable name="ref" select="@ANNOTATION_ID"/>
-    <feat id="{$id}" xlink:href="#{$ref}" value="{ANNOTATION_VALUE}"/>
+
+    <!-- output only if ANNOTATION_VALUE is non-empty -->
+
+    <xsl:if test="ANNOTATION_VALUE != ''">
+      <feat id="{$id}" xlink:href="#{$ref}" value="{ANNOTATION_VALUE}"/>
+    </xsl:if>
+
   </xsl:template>
 
   <xsl:template match="ANNOTATION/REF_ANNOTATION" mode="feature">
     <xsl:param name="tier-type"/>
     <xsl:variable name="id" select="concat($tier-type, '_', position())"/>
     <xsl:variable name="ref" select="@ANNOTATION_REF"/>
-    <feat id="{$id}" xlink:href="#{$ref}" value="{ANNOTATION_VALUE}"/>
+
+    <!-- output only if ANNOTATION_VALUE is non-empty -->
+
+    <xsl:if test="ANNOTATION_VALUE != ''">
+      <feat id="{$id}" xlink:href="#{$ref}" value="{ANNOTATION_VALUE}"/>
+    </xsl:if>
+
   </xsl:template>
 
 </xsl:stylesheet>
