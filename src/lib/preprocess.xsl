@@ -86,7 +86,26 @@
     <xsl:variable name="tval1" select="//TIME_SLOT[@TIME_SLOT_ID = $tref1]/@TIME_VALUE"/>
     <xsl:variable name="tval2" select="//TIME_SLOT[@TIME_SLOT_ID = $tref2]/@TIME_VALUE"/>
 
-    <xsl:if test="$tval1 &lt;= $tval2">
+    <xsl:if test="number($tval1) &lt;= number($tval2)">
+      <xsl:copy>
+        <xsl:apply-templates select="@*|node()"/>
+      </xsl:copy>
+    </xsl:if>
+
+  </xsl:template>
+
+  <!-- also discard any connected REF_ANNOTATIONs -->
+
+  <xsl:template match="REF_ANNOTATION">
+    <xsl:variable name="annot-ref" select="@ANNOTATION_REF"/>
+    <xsl:variable name="align-annot"
+                  select="//ALIGNABLE_ANNOTATION[@ANNOTATION_ID = $annot-ref]"/>
+    <xsl:variable name="tref1" select="$align-annot/@TIME_SLOT_REF1"/>
+    <xsl:variable name="tref2" select="$align-annot/@TIME_SLOT_REF2"/>
+    <xsl:variable name="tval1" select="//TIME_SLOT[@TIME_SLOT_ID = $tref1]/@TIME_VALUE"/>
+    <xsl:variable name="tval2" select="//TIME_SLOT[@TIME_SLOT_ID = $tref2]/@TIME_VALUE"/>
+
+    <xsl:if test="number($tval1) &lt;= number($tval2)">
       <xsl:copy>
         <xsl:apply-templates select="@*|node()"/>
       </xsl:copy>
