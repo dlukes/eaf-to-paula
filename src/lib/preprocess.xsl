@@ -64,7 +64,7 @@
           <xsl:value-of select="//TIME_SLOT[@TIME_SLOT_ID = $time-ref1]/@TIME_VALUE"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="0"/>
+          <xsl:value-of select="-1"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
