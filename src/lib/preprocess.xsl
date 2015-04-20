@@ -74,4 +74,24 @@
                            $min-time-val, $smoothing)/@TIME_SLOT_ID"/>
   </xsl:template>
 
+  <!-- only output ALIGNABLE_ANNOTATIONs where the @TIME_VALUE of
+       @TIME_SLOT_REF1 is smaller than that of @TIME_SLOT_REF2 (rationale:
+       annotations breaking this rule are displayed as zero-width by ELAN
+       anyway, so it's not conceivable that they were intended as part of the
+       transcript by the transcriber) -->
+
+  <xsl:template match="ALIGNABLE_ANNOTATION">
+    <xsl:variable name="tref1" select="@TIME_SLOT_REF1"/>
+    <xsl:variable name="tref2" select="@TIME_SLOT_REF2"/>
+    <xsl:variable name="tval1" select="//TIME_SLOT[@TIME_SLOT_ID = $tref1]/@TIME_VALUE"/>
+    <xsl:variable name="tval2" select="//TIME_SLOT[@TIME_SLOT_ID = $tref2]/@TIME_VALUE"/>
+
+    <xsl:if test="$tval1 &lt;= $tval2">
+      <xsl:copy>
+        <xsl:apply-templates select="@*|node()"/>
+      </xsl:copy>
+    </xsl:if>
+
+  </xsl:template>
+
 </xsl:stylesheet>
