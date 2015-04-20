@@ -60,7 +60,7 @@ normalized to the same `type`:
 - `orthographic 1` and `orthographic 2` (both normalize to `ort`)
 - `abc` and `äbc` (both normalize to `abc`)
 - `...` and `---` (both normalize to an empty value, because they do not
-  contain enough characters which can be converted to ASCII)
+  contain enough characters which can be unequivocally coerced to ASCII letters)
 
 Annotation layers which have a `PARTICIPANT` attribute are namespaced by an id
 derived from it (`spk1` ... `spkN`) on the assumption that each speaker has
