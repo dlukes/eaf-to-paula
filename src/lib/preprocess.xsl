@@ -14,6 +14,7 @@
   <xsl:param name="smoothing" select="20"/>
   <xsl:param name="out-dir" select="'./'"/>
   <xsl:param name="no-normalize-whitespace" select="0"/>
+  <xsl:param name="untrim" select="0"/>
 
   <xsl:template match="@*|node()">
     <xsl:copy>
@@ -115,20 +116,34 @@
 
   </xsl:template>
 
-  <!-- normalize whitespace in ANNOTATION_VALUEs -->
+  <!-- manipulate whitespace in ANNOTATION_VALUEs -->
 
   <xsl:template match="ANNOTATION_VALUE/text()">
+
+    <!-- normalization (trim and collapse contiguous) -->
+
+    <xsl:variable name="after-normalization">
+      <xsl:choose>
+        <xsl:when test="boolean(number($no-normalize-whitespace))">
+          <xsl:value-of select="."/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="normalize-space(.)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <!-- "untrimming" (useful for non-word-tokenized transcripts) -->
+
     <xsl:choose>
-
-      <xsl:when test="boolean(number($no-normalize-whitespace))">
-        <xsl:value-of select="."/>
+      <xsl:when test="boolean(number($untrim))">
+        <xsl:value-of select="concat(' ', $after-normalization, ' ')"/>
       </xsl:when>
-
       <xsl:otherwise>
-        <xsl:value-of select="normalize-space(.)"/>
+        <xsl:value-of select="$after-normalization"/>
       </xsl:otherwise>
-
     </xsl:choose>
+
   </xsl:template>
 
 </xsl:stylesheet>

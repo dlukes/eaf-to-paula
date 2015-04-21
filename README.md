@@ -72,6 +72,11 @@ kind is collapsed to a single space). This is generally desirably if you want
 the corpus to be consistently searchable, but you can turn it off with the `-W`
 option.
 
+Another useful option is `-u` for **"untrimming"** `ANNOTATION_VALUE`s: it adds
+a single space character at the start and end of each annotation string. This
+makes searching for words easier and more consistent in transcripts which are
+not tokenized on the word-level.
+
 # Limitations
 
 No metadata files (at the corpus or document level) are currently being

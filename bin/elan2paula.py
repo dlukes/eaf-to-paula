@@ -59,10 +59,12 @@ def xsltproc(input_file, xsl=None, args=None, message="Running: {}\n"):
     outdir, cname = os.path.split(args.output_dir)
     outdir = os.path.curdir if not outdir else outdir
     no_ws_norm = 1 if args.no_normalize_whitespace else 0
+    untrim = 1 if args.untrim else 0
     xsltparams = ["corpus-name={}".format(cname),
                   "out-dir={}".format(outdir),
                   "smoothing={}".format(args.smoothing),
                   "prepend={}".format(args.prepend),
+                  "untrim={}".format(untrim),
                   "no-normalize-whitespace={}".format(no_ws_norm)]
 
     command = command + [input_file] + xsltparams
@@ -114,6 +116,9 @@ def process_command_line(argv):
                         ANNOTATION_VALUEs (normalization = trim string and
                         collapse all contiguous whitespace of any kind into a
                         single space character)""")
+    parser.add_argument("-u", "--untrim", action="store_true", help=""""untrim"
+                        ANNOTATION_VALUEs (add a single space character at both
+                        start and end)""")
 
     args = parser.parse_args(argv)
 
