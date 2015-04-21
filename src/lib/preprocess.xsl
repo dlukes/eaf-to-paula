@@ -3,6 +3,7 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:lib="lib:lib"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 exclude-result-prefixes="lib">
   <xsl:import href="lib.xsl"/>
   <xsl:output method="xml" version="1.0" standalone="no" indent="yes"
@@ -12,6 +13,7 @@
   <xsl:param name="prepend" select="'doc'"/>
   <xsl:param name="smoothing" select="20"/>
   <xsl:param name="out-dir" select="'./'"/>
+  <xsl:param name="no-normalize-whitespace" select="0"/>
 
   <xsl:template match="@*|node()">
     <xsl:copy>
@@ -111,6 +113,22 @@
       </xsl:copy>
     </xsl:if>
 
+  </xsl:template>
+
+  <!-- normalize whitespace in ANNOTATION_VALUEs -->
+
+  <xsl:template match="ANNOTATION_VALUE/text()">
+    <xsl:choose>
+
+      <xsl:when test="boolean(number($no-normalize-whitespace))">
+        <xsl:value-of select="."/>
+      </xsl:when>
+
+      <xsl:otherwise>
+        <xsl:value-of select="normalize-space(.)"/>
+      </xsl:otherwise>
+
+    </xsl:choose>
   </xsl:template>
 
 </xsl:stylesheet>

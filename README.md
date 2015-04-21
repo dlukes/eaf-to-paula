@@ -42,7 +42,7 @@ command line. List all available options by running:
 $ bin/elan2paula.py -h
 ```
 
-# Assumptions
+# Assumptions and usage tips
 
 The PAULA feat file `type` attribute is derived from the `LINGUISTIC_TYPE_REF`
 attribute of the relevant tier by:
@@ -62,9 +62,15 @@ normalized to the same `type`:
 - `...` and `---` (both normalize to an empty value, because they do not
   contain enough characters which can be unequivocally coerced to ASCII letters)
 
-Annotation layers which have a `PARTICIPANT` attribute are namespaced by an id
-derived from it (`spk1` ... `spkN`) on the assumption that each speaker has
-his/her own set of layers of the given `LINGUISTIC_TYPE`.
+**Annotation layers** which have a `PARTICIPANT` attribute are **namespaced**
+by an id derived from it (`spk1` ... `spkN`) on the assumption that each
+speaker has his/her own set of layers of the given `LINGUISTIC_TYPE`.
+
+**Whitespace** inside `ANNOTATION_VALUE`s is **normalized** by default
+(i.e. the strings are trimmed and any amount of contiguous whitespace of any
+kind is collapsed to a single space). This is generally desirably if you want
+the corpus to be consistently searchable, but you can turn it off with the `-W`
+option.
 
 # Limitations
 

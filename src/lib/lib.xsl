@@ -52,7 +52,9 @@
         select="$time-order/TIME_SLOT[@TIME_SLOT_ID = $ts]/preceding-sibling::TIME_SLOT[1]/@TIME_SLOT_ID"/>
   </xsl:function>
 
-  <!-- Map linguistic types to three-character ASCII-only names without spaces. -->
+  <!-- Map linguistic types to three-character ASCII-only names without
+       spaces. -->
+
   <xsl:function name="lib:normalize-ling-type" as="xs:string">
     <xsl:param name="ling-type" as="xs:string"/>
     <xsl:variable name="only-ascii-letters"
