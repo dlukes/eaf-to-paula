@@ -16,14 +16,6 @@
     <xsl:variable name="doc-dir"
                   select="concat($out-dir, '/', $corpus-name, '/', $file-no-ext)"/>
 
-    <!-- map participant names to shorter ASCII-only names -->
-
-    <xsl:variable name="speakers">
-      <xsl:for-each select="distinct-values(//@PARTICIPANT)">
-        <entry key="{.}" value="spk{position()}"/>
-      </xsl:for-each>
-    </xsl:variable>
-
     <!-- create markables / features for tiers -->
 
     <xsl:for-each select="/ANNOTATION_DOCUMENT/TIER">
@@ -34,7 +26,7 @@
 
       <xsl:variable name="speaker-id">
         <xsl:if test="@PARTICIPANT">
-          <xsl:value-of select="concat($speakers/entry[@key = current()/@PARTICIPANT]/@value, '.')"/>
+          <xsl:value-of select="concat(current()/@PARTICIPANT, '.')"/>
         </xsl:if>
       </xsl:variable>
 

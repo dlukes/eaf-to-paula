@@ -156,7 +156,8 @@
         <xsl:variable name="participant"
                       select="substring-before(@TIER_ID, ' ')"/>
         <xsl:if test="$participant != ''">
-          <xsl:attribute name="PARTICIPANT" select="$participant"/>
+          <xsl:attribute name="PARTICIPANT"
+                         select="concat('spk', $participant)"/>
         </xsl:if>
         <xsl:apply-templates select="@*|node()"/>
       </xsl:copy>
