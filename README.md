@@ -22,12 +22,12 @@ annotation. These can be further converted to the relANNIS format used by the
 
 # Usage
 
-Verify that the string `XSLTPROC` in `bin/elan2paula.py` is a correct path to
+Verify that the string `XSLTPROC` in `bin/eaf2paula.py` is a correct path to
 Saxon / Saxon B (XSLT 2.0 compliant) on your system (or change it accordingly).
 Similarly with the XML validator command stored in `XMLLINT`. Then, run:
 
 ```sh
-$ bin/elan2paula.py path/to/input/eaf/files/
+$ bin/eaf2paula.py path/to/input/eaf/files/
 ```
 
 The PAULA output will appear in your current working directory in a directory
@@ -39,7 +39,7 @@ occur at the same time. This can be changed by setting the `-s` option on the
 command line. List all available options by running:
 
 ```sh
-$ bin/elan2paula.py -h
+$ bin/eaf2paula.py -h
 ```
 
 # Assumptions and usage tips

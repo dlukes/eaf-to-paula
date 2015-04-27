@@ -3,9 +3,9 @@
 """Transform a corpus of ELAN transcripts to the PAULA standoff annotation
 format.
 
-Basic usage: elan2paula.py input_dir
+Basic usage: eaf2paula.py input_dir
 
-Consult also elan2paula.py -h for additional parameters.
+Consult also eaf2paula.py -h for additional parameters.
 
 """
 
