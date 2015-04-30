@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE paula
+  SYSTEM "paula_mark.dtd">
+<paula xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+   <header paula_id="[...].spk_seg"/>
+   <markList type="spk" xml:base="[...].tok.xml">
+      <!-- <mark id="spk0" xlink:href="#ts1"/> -->
+   </markList>
+</paula>

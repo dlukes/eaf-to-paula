@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE paula SYSTEM "paula_rel.dtd">
+<paula version="1.1">
+  <header paula_id="[...].spk_rel"/>
+  <relList xmlns:xlink="http://www.w3.org/1999/xlink"
+           xml:base="[...].spk_seg.xml"
+           type="rel">
+    <!-- <rel id="spk0rel0" xlink:href="#spk0" target="spk0.ortofon.doc13D005N.ort_seg.xml#a1"/> -->
+    <!-- ... -->
+    <!-- <rel id="spk1rel0" xlink:href="#spk1" target="spk1.ortofon.doc13D005N.ort_seg.xml#a22"/> -->
+    <!-- ... -->
+  </relList>
+</paula>

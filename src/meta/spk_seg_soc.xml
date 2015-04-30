@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE paula
+  SYSTEM "paula_feat.dtd">
+<paula xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+   <header paula_id="[...].spk_seg_soc"/>
+   <featList type="soc" xml:base="[...].spk_seg.xml">
+      <!-- <feat id="soc0" xlink:href="#spk0" value="muž"/> -->
+   </featList>
+</paula>
