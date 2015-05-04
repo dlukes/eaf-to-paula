@@ -13,7 +13,7 @@ import re
 import lxml.etree as etree
 
 meta = sys.argv[1]
-corpus = sys.argv[2]
+corpus = sys.argv[2].strip("/").strip("\\")
 
 SCRIPTDIR = os.path.dirname(os.path.realpath(__file__))
 BASEDIR = os.path.normpath(os.path.join(SCRIPTDIR, ".."))
@@ -39,14 +39,14 @@ for doc_path in glob.iglob(os.path.join(corpus, "*/")):
     doc = os.path.split(doc_path[:-1])[1]
 
     # generate IDs / filename stubs
-    ss_id = "ortofon.{}.spk_seg".format(doc)
-    sss_id = "ortofon.{}.spk_seg_soc".format(doc)
-    sr_id = "ortofon.{}.spk_rel".format(doc)
+    ss_id = "{}.{}.spk_seg".format(corpus, doc)
+    sss_id = "{}.{}.spk_seg_soc".format(corpus, doc)
+    sr_id = "{}.{}.spk_rel".format(corpus, doc)
 
     # set up templates
     ss = deepcopy(spk_seg)
     ss.xpath("//header")[0].attrib["paula_id"] = ss_id
-    ss.xpath("//markList")[0].attrib["{http://www.w3.org/XML/1998/namespace}base"] = "ortofon.{}.tok.xml".format(doc)
+    ss.xpath("//markList")[0].attrib["{http://www.w3.org/XML/1998/namespace}base"] = "{}.{}.tok.xml".format(corpus, doc)
 
     sss = deepcopy(spk_seg_soc)
     sss.xpath("//header")[0].attrib["paula_id"] = sss_id
