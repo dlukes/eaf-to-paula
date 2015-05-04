@@ -36,6 +36,8 @@ with open(meta, "r") as f:
 
 # create the metadata annotations for the individual speakers
 for doc_path in glob.iglob(os.path.join(corpus, "*/")):
+    sys.stderr.write("Processing: {} ...\n".format(doc_path))
+
     doc = os.path.split(doc_path[:-1])[1]
 
     # generate IDs / filename stubs
