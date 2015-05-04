@@ -154,7 +154,7 @@
     <xsl:if test="not(matches(@TIER_ID, 'KONTROLA'))">
       <xsl:copy>
         <xsl:variable name="participant"
-                      select="substring-before(@TIER_ID, ' ')"/>
+                      select="replace(@TIER_ID, '[^\d]', '')"/>
         <xsl:if test="$participant != ''">
           <xsl:attribute name="PARTICIPANT"
                          select="concat('spk', $participant)"/>
