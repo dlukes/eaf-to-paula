@@ -72,7 +72,7 @@ for doc_path in glob.iglob(os.path.join(corpus, "*/")):
                          "feat",
                          attrib = {
                              "{http://www.w3.org/1999/xlink}href": "#" + spk,
-                             "value": soc[os.path.basename(doc)][spk]
+                             "value": soc[os.path.basename(doc)].get(spk, "<empty>")
                          })
 
     ss.write(os.path.join(doc_path, ss_id + ".xml"),
