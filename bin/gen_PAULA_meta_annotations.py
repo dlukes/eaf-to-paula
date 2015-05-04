@@ -84,9 +84,9 @@ for doc_path in glob.iglob(os.path.join(corpus, "*/")):
 
     # link segments spoken by individual speakers to their metadata with pointing
     # relations
-    meta_glob = glob.iglob(os.path.join(doc_path, "*_*_met*"))
-    ort_glob = glob.iglob(os.path.join(doc_path, "*_*_ort*"))
-    fon_glob = glob.iglob(os.path.join(doc_path, "*_*_fon*"))
+    meta_glob = glob.iglob(os.path.join(doc_path, "*.met_seg.*"))
+    ort_glob = glob.iglob(os.path.join(doc_path, "*.ort_seg.*"))
+    fon_glob = glob.iglob(os.path.join(doc_path, "*.fon_seg.*"))
 
     rel_list = sr.xpath("//relList")[0]
     rel_count = 1
@@ -95,7 +95,7 @@ for doc_path in glob.iglob(os.path.join(corpus, "*/")):
         tree = etree.parse(annot)
         annot = os.path.basename(annot)
         spk = re.findall(r"spk.", annot)[0]
-        for feat in tree.xpath("//feat"):
+        for feat in tree.xpath("//mark"):
             id = feat.attrib.get("id")
             etree.SubElement(rel_list,
                              "rel",
