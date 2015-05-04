@@ -86,9 +86,9 @@ for doc_path in glob.iglob(os.path.join(corpus, "*/")):
 
     # link segments spoken by individual speakers to their metadata with pointing
     # relations
-    meta_glob = glob.iglob(os.path.join(doc_path, "*.met_seg.*"))
-    ort_glob = glob.iglob(os.path.join(doc_path, "*.ort_seg.*"))
-    fon_glob = glob.iglob(os.path.join(doc_path, "*.fon_seg.*"))
+    meta_glob = glob.iglob(os.path.join(doc_path, "spk*.met_seg.*"))
+    ort_glob = glob.iglob(os.path.join(doc_path, "spk*.ort_seg.*"))
+    fon_glob = glob.iglob(os.path.join(doc_path, "spk*.fon_seg.*"))
 
     rel_list = sr.xpath("//relList")[0]
     rel_count = 1
