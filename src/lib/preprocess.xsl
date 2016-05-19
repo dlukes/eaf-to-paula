@@ -153,12 +153,17 @@
   <xsl:template match="TIER">
     <xsl:if test="not(matches(@TIER_ID, 'KONTROLA'))">
       <xsl:copy>
-        <xsl:variable name="participant"
+        <xsl:variable name="spk_num"
                       select="replace(@TIER_ID, '[^\d]', '')"/>
-        <xsl:if test="$participant != ''">
-          <xsl:attribute name="PARTICIPANT"
-                         select="concat('spk', $participant)"/>
-        </xsl:if>
+        <xsl:choose>
+          <xsl:when test="$spk_num != ''">
+            <xsl:attribute name="PARTICIPANT"
+                           select="concat('spk', $spk_num)"/>
+          </xsl:when>
+          <xsl:when test="matches(@TIER_ID, 'jo', 'i')">
+            <xsl:attribute name="PARTICIPANT">jo</xsl:attribute>
+          </xsl:when>
+        </xsl:choose>
         <xsl:apply-templates select="@*|node()"/>
       </xsl:copy>
     </xsl:if>
