@@ -47,8 +47,6 @@ def xsltproc(input_file, xsl=None, args=None, message="Running: {}\n"):
     message to STDERR.
 
     """
-    global XSLTPROC
-
     command = [XSLTPROC, "-ext:on"]
     if xsl:
         command.append("-xsl:{}".format(xsl))
@@ -75,8 +73,6 @@ def xmllint(input_file):
     """Run XMLLINT on input_file.
 
     """
-    global XMLLINT
-
     command = [XMLLINT, "--valid", "--noout"]
 
     sys.stderr.write("  {}... ".format(input_file))
